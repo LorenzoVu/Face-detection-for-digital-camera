@@ -19,15 +19,15 @@ As a Data Scientist hired to develop a face detection system for digital cameras
 
 ## Solution Architecture
 
-The implementation uses a two-stage cascade approach:
+The implementation uses a two-stage cascade approach inspired by the Viola-Jones framework [3]:
 
 1. **First Stage (Fast Rejection)**: 
-   - Local Binary Patterns (LBP) features
+   - Local Binary Patterns (LBP) features [2]
    - RandomForest classifier
    - Quickly filters out obvious non-face regions
 
 2. **Second Stage (Precise Verification)**:
-   - Histogram of Oriented Gradients (HOG) features
+   - Histogram of Oriented Gradients (HOG) features [1]
    - Linear SVM classifier with optional PCA
    - Accurately verifies face candidates that passed the first stage
 
@@ -53,17 +53,17 @@ The implementation uses a two-stage cascade approach:
 - Multiple negative samples generated from non-face regions
 
 ### Feature Extraction
-- **LBP**: Uniform patterns with 8 points and radius of 1
-- **HOG**: 9 orientations, 8×8 pixel cells, 2×2 cell blocks
-- **PCA**: Optional dimensionality reduction to 100 components
+- **LBP**: Uniform patterns with 8 points and radius of 1, following Ojala et al. [2]
+- **HOG**: 9 orientations, 8×8 pixel cells, 2×2 cell blocks, based on Dalal & Triggs [1]
+- **PCA**: Optional dimensionality reduction to 100 components, implemented using Scikit-learn [5]
 
 ### Model Training
-- Hyperparameter optimization using RandomizedSearchCV
-- Hard-negative mining to improve robustness
+- Hyperparameter optimization using RandomizedSearchCV from Scikit-learn [5]
+- Hard-negative mining to improve robustness, inspired by Felzenszwalb et al. [4]
 - Cross-validation to ensure generalization
 
 ### Sliding Window Detection
-- Multi-scale approach (70%, 50%, 35%, and 25% of minimum dimension)
+- Multi-scale approach (70%, 50%, 35%, and 25% of minimum dimension), following the principles of the Viola-Jones cascade [3]
 - Adaptive step size based on window dimensions
 - Optimized threshold combinations for precision/recall balance
 
@@ -96,22 +96,24 @@ detections = detect_faces_sliding_window_cascade(
 ## Technical Approach
 
 The project followed these key steps:
-1. Literature research on lightweight face detection approaches
+1. Literature research on lightweight face detection approaches [1,2,3,4]
 2. Dataset collection and preparation
-3. Feature extraction pipeline development
-4. Two-stage classifier training and optimization
-5. Sliding window implementation with cascade evaluation
+3. Feature extraction pipeline development, implementing LBP [2] and HOG [1] features
+4. Two-stage classifier training and optimization using Scikit-learn [5]
+5. Sliding window implementation with cascade evaluation, inspired by Viola-Jones [3]
 6. Performance evaluation and threshold tuning
 
 ## Conclusions
 
-This implementation demonstrates that traditional computer vision techniques, when carefully optimized and combined in a cascade architecture, can provide competitive performance for face detection tasks in embedded camera applications while meeting strict power and resource constraints.
+This implementation demonstrates that traditional computer vision techniques, when carefully optimized and combined in a cascade architecture [3], can provide competitive performance for face detection tasks in embedded camera applications while meeting strict power and resource constraints.
 
 The system achieves a good balance between:
 - **Speed**: Fast enough for real-time applications on embedded hardware
 - **Accuracy**: Comparable to more complex models in controlled environments
 - **Resource usage**: Minimal memory and computational requirements
 - **Flexibility**: Adjustable thresholds for different use cases
+
+Our approach combines the texture descriptive power of LBP [2] with the structural representation capabilities of HOG [1], leveraging the efficiency of the cascade architecture [3] and the discriminative power of SVMs with hard-negative mining [4]. All algorithms were implemented using Scikit-learn [5], ensuring both reliability and maintainability.
 
 ## References
 
