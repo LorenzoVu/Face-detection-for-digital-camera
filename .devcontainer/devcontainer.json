@@ -1,0 +1,16 @@
+{
+    "name": "Face Detection Project",
+    "image": "mcr.microsoft.com/devcontainers/python:3.12",
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "8gb",
+        "storage": "32gb",
+        "gpu": true
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/nvidia-cuda:1": {
+            "installCudnn": true
+        }
+    },
+    "postCreateCommand": "pip install --no-cache-dir numpy==1.24.3 tensorflow==2.15.0 opencv-python-headless==4.8.1.78 scikit-learn==1.4.0 scikit-image==0.22.0 mtcnn==0.1.1 tf-keras"
+}
