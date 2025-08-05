@@ -1,43 +1,43 @@
-# RIEPILOGO ADDESTRAMENTO MODELLI
+# MODEL TRAINING SUMMARY
 
-Data: 2025-08-03 15:00:22
+Data: 2025-08-05 12:34:56
 
-## PARAMETRI OTTIMALI
+## BEST PARAMETERS
 
-RandomForest (LBP): {'n_estimators': 200, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_depth': None}
+RandomForest (LBP): {'n_estimators': 200, 'min_samples_split': 10, 'min_samples_leaf': 1, 'max_depth': 16}
 LinearSVC (HOG): {'max_iter': 1000, 'dual': True, 'class_weight': None, 'C': 0.1}
 LinearSVC (PCA): {'max_iter': 1000, 'dual': True, 'class_weight': None, 'C': 0.1}
 
-## PERFORMANCE DEI MODELLI
+## MODEL PERFORMANCE
 
 RandomForest (LBP):
-  - Precision: 0.8872
-  - Recall: 0.8655
-  - F1-Score: 0.8762
-  - Accuracy: 0.8778
+  - Precision: 0.8854
+  - Recall: 0.8575
+  - F1-Score: 0.8712
+  - Accuracy: 0.8732
 
 LinearSVC (HOG):
-  - Precision: 0.9087
-  - Recall: 0.8510
-  - F1-Score: 0.8789
-  - Accuracy: 0.8828
+  - Precision: 0.9070
+  - Recall: 0.8480
+  - F1-Score: 0.8765
+  - Accuracy: 0.8805
 
 LinearSVC (PCA):
-  - Precision: 0.9179
-  - Recall: 0.8670
-  - F1-Score: 0.8917
+  - Precision: 0.9131
+  - Recall: 0.8725
+  - F1-Score: 0.8924
   - Accuracy: 0.8948
 
 LinearSVC (HOG + Hard-Neg):
-  - Precision: 0.9115
-  - Recall: 0.8500
-  - F1-Score: 0.8797
-  - Accuracy: 0.8838
+  - Precision: 0.9075
+  - Recall: 0.8440
+  - F1-Score: 0.8746
+  - Accuracy: 0.8790
 
 LinearSVC (PCA + Hard-Neg):
-  - Precision: 0.9209
-  - Recall: 0.8615
-  - F1-Score: 0.8902
-  - Accuracy: 0.8938
+  - Precision: 0.9194
+  - Recall: 0.8670
+  - F1-Score: 0.8924
+  - Accuracy: 0.8955
 
-Il modello con le migliori performance è: LinearSVC (PCA)
+The model with the best performance is: LinearSVC (PCA + Hard-Neg)
