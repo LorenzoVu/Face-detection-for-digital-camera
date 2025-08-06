@@ -1,124 +1,20 @@
 # Face Detection System for Digital Cameras
 
+## Introduction
+This notebook implements a robust and lightweight face detection system designed specifically for embedded digital camera applications. The system is engineered to operate efficiently on resource-constrained hardware (Cortex-A55–class SoC) while maintaining real-time performance and high accuracy for face detection tasks.
+
 ## Project Overview
+Our face detection system employs a two-stage cascade approach to efficiently identify faces in images:
 
-This repository contains a custom face detection system designed for embedded digital camera applications. The system uses a two-stage cascade approach combining traditional computer vision techniques with machine learning classifiers to efficiently detect faces in images while minimizing computational resources.
+1. **Stage 1 - Fast Rejector**: Uses Local Binary Patterns (LBP) with a Random Forest classifier to quickly eliminate most non-face regions with minimal computational cost
+2. **Stage 2 - Precise Verifier**: Applies Histogram of Oriented Gradients (HOG) with a Linear SVM to accurately verify face candidates that passed the first stage
 
-## Challenge
+### Implementation Pipeline
+1. **Dataset Preparation**: Processes training, validation, and test image sets with face annotations
+2. **Feature Extraction**: Implements LBP and HOG feature extraction for facial pattern recognition
+3. **Model Training**: Trains and optimizes Random Forest and SVM classifiers with hyperparameter tuning
+4. **Face Detection**: Applies the trained models using a sliding window approach with scale pyramid
+5. **Post-Processing**: Implements non-maximum suppression to eliminate redundant detections
+6. **Performance Evaluation**: Measures accuracy, precision, recall, and computational efficiency
 
-As a Data Scientist hired to develop a face detection system for digital cameras, the goal was to create a pipeline that would help technicians automatically optimize camera settings during selfies. The system needed to identify faces in images and return the coordinates of bounding boxes where faces are detected, or an empty list if no faces are present.
-
-## Requirements
-
-- **Input**: An image
-- **Output**: A list of bounding box coordinates where faces are detected
-- **Constraints**:
-  - No pre-trained models allowed (must be trained from scratch using Scikit-learn)
-  - Limited computational resources
-  - Optimized for embedded systems with power constraints
-
-## Solution Architecture
-
-The implementation uses a two-stage cascade approach inspired by the Viola-Jones framework [3]:
-
-1. **First Stage (Fast Rejection)**: 
-   - Local Binary Patterns (LBP) features [2]
-   - RandomForest classifier
-   - Quickly filters out obvious non-face regions
-
-2. **Second Stage (Precise Verification)**:
-   - Histogram of Oriented Gradients (HOG) features [1]
-   - Linear SVM classifier with optional PCA
-   - Accurately verifies face candidates that passed the first stage
-
-3. **Post-processing**:
-   - Non-Maximum Suppression (NMS) to reduce redundant detections
-   - Minimum size filtering to eliminate small false positives
-
-## Performance Highlights
-
-- **Speed**: 2-4× faster than OpenCV's DNN-based face detector
-- **Accuracy**: 
-  - RandomForest: 88.7% precision, 86.6% recall
-  - LinearSVC with PCA: 92.1% precision, 86.2% recall
-- **Resource Usage**: ~10MB memory footprint (vs. ~100MB for DNN approaches)
-- **Power Efficiency**: Estimated 60-70% reduction in power consumption
-
-## Implementation Details
-
-### Dataset Preparation
-- Created from public face datasets
-- Split into training (70%), validation (15%), and test (15%) sets
-- Face patches extracted using OpenCV's DNN detector for initial labeling
-- Multiple negative samples generated from non-face regions
-
-### Feature Extraction
-- **LBP**: Uniform patterns with 8 points and radius of 1, following Ojala et al. [2]
-- **HOG**: 9 orientations, 8×8 pixel cells, 2×2 cell blocks, based on Dalal & Triggs [1]
-- **PCA**: Optional dimensionality reduction to 100 components, implemented using Scikit-learn [5]
-
-### Model Training
-- Hyperparameter optimization using RandomizedSearchCV from Scikit-learn [5]
-- Hard-negative mining to improve robustness, inspired by Felzenszwalb et al. [4]
-- Cross-validation to ensure generalization
-
-### Sliding Window Detection
-- Multi-scale approach (70%, 50%, 35%, and 25% of minimum dimension), following the principles of the Viola-Jones cascade [3]
-- Adaptive step size based on window dimensions
-- Optimized threshold combinations for precision/recall balance
-
-## Usage
-
-```python
-# Load the trained models
-rf_model = joblib.load('saved_models/randomforest_lbp_optimized.pkl')
-svm_model = joblib.load('saved_models/linearsvc_pca_hardneg.pkl')
-
-# Detect faces in an image
-detections = detect_faces_sliding_window_cascade(
-    image, 
-    rf_model, 
-    svm_model, 
-    rf_threshold=0.6, 
-    svm_threshold=0.8
-)
-
-# Result format: list of (x, y, width, height, confidence_score)
-```
-
-## Project Structure
-
-- `face_detection.ipynb`: Main notebook with complete implementation
-- `models/`: Folder containing OpenCV DNN model used for initial dataset creation
-- `saved_models/`: Folder containing trained Scikit-learn models
-- `Selfie_test/`, `Selfie_training/`, `Selfie_validation/`: Image datasets
-
-## Technical Approach
-
-The project followed these key steps:
-1. Literature research on lightweight face detection approaches [1,2,3,4]
-2. Dataset collection and preparation
-3. Feature extraction pipeline development, implementing LBP [2] and HOG [1] features
-4. Two-stage classifier training and optimization using Scikit-learn [5]
-5. Sliding window implementation with cascade evaluation, inspired by Viola-Jones [3]
-6. Performance evaluation and threshold tuning
-
-## Conclusions
-
-This implementation demonstrates that traditional computer vision techniques, when carefully optimized and combined in a cascade architecture [3], can provide competitive performance for face detection tasks in embedded camera applications while meeting strict power and resource constraints.
-
-The system achieves a good balance between:
-- **Speed**: Fast enough for real-time applications on embedded hardware
-- **Accuracy**: Comparable to more complex models in controlled environments
-- **Resource usage**: Minimal memory and computational requirements
-- **Flexibility**: Adjustable thresholds for different use cases
-
-Our approach combines the texture descriptive power of LBP [2] with the structural representation capabilities of HOG [1], leveraging the efficiency of the cascade architecture [3] and the discriminative power of SVMs with hard-negative mining [4]. All algorithms were implemented using Scikit-learn [5], ensuring both reliability and maintainability.
-
-## References
-
-1. Dalal, N., & Triggs, B. (2005). Histograms of oriented gradients for human detection.
-2. Ojala, T., Pietikäinen, M., & Mäenpää, T. (2002). Multiresolution gray-scale and rotation invariant texture classification with local binary patterns.
-3. Viola, P., & Jones, M. J. (2004). Robust real-time face detection.
-4. Felzenszwalb, P. F., Girshick, R. B., McAllester, D., & Ramanan, D. (2009). Object detection with discriminatively trained part-based models.
-5. Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011.
+This notebook serves as a comprehensive implementation of the complete face detection pipeline, from data preparation to final model evaluation.
